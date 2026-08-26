@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "sources": ["../src/register.ts"],
+  "sourcesContent": [
+    "/**\n * Early-instrumentation entrypoint: `import \"@sazabi/browser/register\"`.\n *\n * Importing this module installs the SDK's fetch/XHR/history patches as\n * dormant, transparent passthroughs at module-evaluation time — before any\n * other library's module-scope code can capture the native functions (the\n * race `init()` alone cannot win, since every static import in an app's\n * entry file evaluates before its first statement). `init()` later activates\n * them with configuration; until then they observe nothing, store nothing,\n * and send nothing.\n *\n * Put this import above all other imports in your application entry module.\n */\nimport { ensureNavigationPatches } from \"./navigation\";\nimport { ensureNetworkPatches } from \"./network\";\n\nif (typeof window !== \"undefined\") {\n  try {\n    ensureNetworkPatches();\n    ensureNavigationPatches();\n  } catch {\n    // Registration must never break the host app; init() re-ensures.\n  }\n}\n"
+  ],
+  "mappings": "+CAgBA,GAAI,OAAO,OAAW,IACpB,GAAI,CACF,EAAqB,EACrB,EAAwB,EACxB,KAAM",
+  "debugId": "711997A6CB99FCE864756E2164756E21",
+  "names": []
+}
