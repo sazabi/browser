@@ -1,7 +1,7 @@
 {
   "name": "@sazabi/browser",
   "description": "Sazabi browser observability SDK — semantic event stream capture with W3C trace context propagation",
-  "version": "0.2.0",
+  "version": "0.2.0-dev.gc862c51",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
