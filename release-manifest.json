@@ -1,7 +1,7 @@
 {
-  "sourceSha": "d910759747ed3f2f3aa036006b5ac06741b2d8d0",
-  "sourceRunId": "34577481639",
-  "builtAt": "2026-09-11T08:19:17Z",
+  "sourceSha": "e4dfb4ae98662b1aade61f4d665f2452a5424c47",
+  "sourceRunId": "34671530394",
+  "builtAt": "2026-09-12T03:53:32Z",
   "distSha256": "965682ccb2990902067cff7666803c5466c7431a16ee90ea50a4a2cd6585afff",
   "baseVersion": "0.2.0",
   "syncFiles": [
@@ -9,5 +9,5 @@
     "package.json",
     "release-manifest.json"
   ],
-  "version": "0.2.0"
+  "version": "0.2.0-dev.ge4dfb4a"
 }
