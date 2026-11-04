@@ -245,16 +245,30 @@ jobs:
           DIST_TAG: ${{ steps.channel.outputs.dist_tag }}
           PACKAGE_NAME: ${{ steps.version-check.outputs.name }}
           PACKAGE_VERSION: ${{ steps.version-check.outputs.version }}
+          # npm processes provenance publishes asynchronously ("Your package is
+          # being processed and may take a few minutes to become available").
+          # A 60 s loop declared already-successful publishes failed
+          # (@sazabi/cli 1.11.0 took ~5 min, 1.13.1 ~4 min), which stopped the
+          # gitops handler before its follow-up steps. Budget 10 min; the
+          # gitops handler waits up to PUBLISH_WAIT_SECONDS (900 s) for this run.
+          VERIFY_TIMEOUT_SECONDS: "600"
+          VERIFY_INTERVAL_SECONDS: "15"
         run: |
           set -euo pipefail
-          for attempt in 1 2 3 4 5 6; do
+          deadline=$(( $(date +%s) + VERIFY_TIMEOUT_SECONDS ))
+          attempt=0
+          while :; do
+            attempt=$(( attempt + 1 ))
             resolved="$(npm view "$PACKAGE_NAME" "dist-tags.${DIST_TAG}" 2>/dev/null || true)"
             if [ "$resolved" = "$PACKAGE_VERSION" ]; then
-              echo "dist-tag ${DIST_TAG} -> ${PACKAGE_VERSION} confirmed."
+              echo "dist-tag ${DIST_TAG} -> ${PACKAGE_VERSION} confirmed after ${attempt} attempt(s)."
               exit 0
             fi
-            echo "Attempt ${attempt}: dist-tag ${DIST_TAG} is '${resolved:-<unset>}', expected ${PACKAGE_VERSION}; retrying..."
-            sleep 10
+            if [ "$(date +%s)" -ge "$deadline" ]; then
+              break
+            fi
+            echo "Attempt ${attempt}: dist-tag ${DIST_TAG} is '${resolved:-<unset>}', expected ${PACKAGE_VERSION}; npm may still be processing the publish, retrying in ${VERIFY_INTERVAL_SECONDS}s..."
+            sleep "$VERIFY_INTERVAL_SECONDS"
           done
-          echo "::error::dist-tag ${DIST_TAG} does not point at ${PACKAGE_VERSION} after publish."
+          echo "::error::dist-tag ${DIST_TAG} does not point at ${PACKAGE_VERSION} ${VERIFY_TIMEOUT_SECONDS}s after publish."
           exit 1
