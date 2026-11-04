@@ -1,8 +1,14 @@
-import type { WebEvent } from "./types";
+import { type ClientEvent } from "./client-sdk-core/index.js";
 export interface NavigationCaptureOptions {
-    emit(event: WebEvent): void;
+    emit(event: ClientEvent): void;
     /** Fired on every captured navigation (dead-click signal). */
     onNavigate(): void;
+    /**
+     * Applied to every page URL the event records (`url.full` and
+     * `app.navigation.from`, the referrer included): the core's `redactUrl`
+     * with the app's `network.redactQueryParams`. The dedupe compares raw URLs.
+     */
+    redactUrl(url: string): string;
 }
 export interface NavigationCaptureHandle {
     teardown(): void;
@@ -16,8 +22,8 @@ export declare const ensureNavigationPatches: () => void;
 /** Restore the natives if the current implementations are still ours. */
 export declare const uninstallNavigationPatches: () => void;
 /**
- * SPA navigation capture. Listeners alone miss programmatic navigation —
- * which is most navigation in React apps — so `history.pushState` /
+ * SPA navigation capture. Listeners alone miss programmatic navigation,
+ * which is most navigation in React apps, so `history.pushState` /
  * `replaceState` are wrapped under the same isolation rules as the network
  * patch.
  */

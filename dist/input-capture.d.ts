@@ -1,6 +1,6 @@
-import type { WebEvent } from "./types";
+import type { ClientEvent } from "./client-sdk-core/index.js";
 export interface InputCaptureOptions {
-    emit(event: WebEvent): void;
+    emit(event: ClientEvent): void;
 }
 export interface InputCaptureHandle {
     /** SPA navigation ends any open episodes. */

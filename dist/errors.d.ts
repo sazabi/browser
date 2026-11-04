@@ -1,6 +1,6 @@
-import type { WebEvent } from "./types";
+import { type ClientEvent } from "./client-sdk-core/index.js";
 export interface ErrorCaptureOptions {
-    emit(event: WebEvent): void;
+    emit(event: ClientEvent): void;
 }
 export interface ErrorCaptureHandle {
     teardown(): void;

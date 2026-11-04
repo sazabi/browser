@@ -1,10 +1,12 @@
-import type { WebEvent } from "./types";
+import { type ClientEvent } from "./client-sdk-core/index.js";
 export interface ResourceObserverOptions {
-    emit(event: WebEvent): void;
+    emit(event: ClientEvent): void;
     /** SDK-internal endpoints: never reported. */
     isInternalUrl(url: string): boolean;
     /** Would the active config have injected trace context into this URL? */
     isInjectionTarget(url: string): boolean;
+    /** Query parameter names redacted from `url.full` beside the default list. */
+    redactQueryParams?: (string | RegExp)[];
 }
 export interface ResourceObserverHandle {
     teardown(): void;

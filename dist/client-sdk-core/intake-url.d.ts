@@ -1,15 +1,15 @@
 /**
  * Resolving the intake endpoint from a single URL.
  *
- * Every other Sazabi log source is configured with one intake URL, and public
- * keys are meant to stay a low-level detail customers never handle. The key is
- * already in the URL: the intake edge reconstructs it from the hostname
- * (terraform/main/cloudfront-functions/intake-router.js), so the SDK can do the
- * same reconstruction locally and send the Bearer header itself.
+ * Every Sazabi log source is configured with one intake URL, and public keys
+ * stay a low-level detail customers never handle. The key is already in the
+ * URL: the intake edge reconstructs it from the hostname
+ * (terraform/main/cloudfront-functions/intake-router.js), so the SDK does the
+ * same reconstruction locally and sends the Bearer header itself.
  *
  * Two keyed shapes exist, matching the edge's two grammars:
- *   {hex}.{region}.intake.{domain}            — prefixless (what log sources issue)
- *   {adapter}-{hex}.{region}.intake.{domain}  — keyed-adapter (legacy, still served)
+ *   {hex}.{region}.intake.{domain}            prefixless (what log sources issue)
+ *   {adapter}-{hex}.{region}.intake.{domain}  keyed-adapter (legacy, still served)
  *
  * A URL in neither shape is not an error: it may be a proxy or a custom
  * endpoint. The SDK then requires an explicit `publicKey`, so a
@@ -17,7 +17,7 @@
  */
 export interface ResolvedIntakeEndpoint {
     /**
-     * Base to POST to — origin plus any proxy path prefix, no trailing slash.
+     * Base to POST to: origin plus any proxy path prefix, no trailing slash.
      * The transport appends `/v1/logs`.
      */
     baseUrl: string;

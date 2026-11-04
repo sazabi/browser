@@ -1,10 +1,11 @@
-import type { BrowserSdkConfig, EventSeverity } from "./types";
-export type { AttributeValue, BrowserSdkConfig, ConsoleCaptureConfig, ConsoleCaptureLevel, EventAttributes, EventSeverity, InputCaptureConfig, NetworkCaptureConfig, WebEvent, WebEventType, } from "./types";
-export { SDK_VERSION } from "./version";
+import { type EventSeverity } from "./client-sdk-core/index.js";
+import type { BrowserSdkConfig } from "./types.js";
+export type { AttributeValue, BeforeSend, BrowserSdkConfig, ClientEvent, ClientEventType, ConsoleCaptureConfig, ConsoleCaptureLevel, EventAttributes, EventSeverity, InputCaptureConfig, NetworkCaptureConfig, PointerCaptureConfig, } from "./types.js";
+export { SDK_VERSION } from "./version.js";
 /**
  * Initialize the SDK. Idempotent: repeat calls are ignored. When `consent`
- * is provided, nothing new is installed — no listeners, no patches, no
- * network — until it resolves true; on false (or a throw) the SDK stays
+ * is provided, nothing new is installed (no listeners, no patches, no
+ * network) until it resolves true; on false (or a throw) the SDK stays
  * dormant. (Patches pre-installed by `@sazabi/browser/register` exist
  * but remain inert passthroughs until activation.)
  */
@@ -20,7 +21,7 @@ export declare const reset: () => void;
 /** Emit a custom mark into the session event stream. */
 export declare const addEvent: (name: string, attributes?: Record<string, unknown>) => void;
 /**
- * Emit an application log line (`web.event_type: "log"`) with session context
+ * Emit an application log line (`app.event_type: "log"`) with session context
  * attached. Drops silently before init/consent, like all capture.
  */
 export declare const log: (severity: EventSeverity, message: string, metadata?: Record<string, unknown>) => void;

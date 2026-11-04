@@ -1,3 +1,4 @@
+import { type RandomBytes } from "./random.js";
 export interface RequestTraceContext {
     /** Headers to inject (`traceparent`, and `tracestate` when present). */
     headers: Record<string, string>;
@@ -19,7 +20,7 @@ export interface HostSpanContext {
 }
 export declare const readHostSpanContext: () => HostSpanContext | undefined;
 /**
- * W3C trace context for outgoing requests — hand-rolled header formatting
+ * W3C trace context for outgoing requests: hand-rolled header formatting
  * (equivalence-tested against OTel's W3CTraceContextPropagator), zero
  * runtime dependencies. If the host app runs its own OTel and has an active
  * span, that span's context (including its flags and tracestate) is reused
@@ -28,4 +29,5 @@ export declare const readHostSpanContext: () => HostSpanContext | undefined;
  */
 export declare const createTraceContextManager: (options: {
     sampledFlag: boolean;
+    randomBytes: RandomBytes;
 }) => TraceContextManager;
