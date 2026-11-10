@@ -124,6 +124,8 @@ init({
 
 `identify()` calls made while consent is pending are buffered and applied when capture starts.
 
+To still hear about crashes from visitors who have not opted in, add `errorsBeforeConsent: true`. Until consent resolves true, the SDK then reports uncaught errors and unhandled promise rejections only: no session, window or user id, no cookie or storage access, and the page recorded as origin and path without query or fragment (`app.consent.state: "not_granted"`). Full capture replaces it once consent is granted. Check with your privacy counsel before enabling it for visitors who must opt in.
+
 ## Configuration
 
 | Option | Default | Purpose |
@@ -138,6 +140,7 @@ init({
 | `console.capture` / `console.levels` | `true`, `["error", "warn"]` | Console mirroring |
 | `input.capture` | `true` | Field-interaction episodes |
 | `consent` | off | Hold all capture until it resolves true |
+| `errorsBeforeConsent` | `false` | With `consent`, report uncaught errors (without ids or storage) while consent is pending or refused |
 | `flushIntervalMs` | `5000` | Batch flush cadence |
 | `maxQueuedEvents` | `500` | Events held while the intake is unreachable (plus a 1 MiB cap); the oldest are dropped first, and a single event larger than 1 MiB is dropped |
 | `beforeSend` | off | Edit or drop an event before it is queued: `(event) => event \| null`. The browser reports a dropped connection, a CORS or CSP refusal and an extension block identically (status 0, `Failed to fetch`), so the SDK records them all at `ERROR`; use this hook when your app knows better, e.g. record a network failure that hung for seconds at `DEBUG`. A hook that throws drops the event and warns once; an event captured synchronously while the hook runs (a `log()` inside it) is dropped. A `fetch` the hook makes produces its own network event once it completes, which the hook sees like any other, so a hook that forwards events must exclude its own requests |

@@ -59,6 +59,16 @@ export interface BrowserSdkConfig {
      * grants) are deliberately deferred; only the API shape is stable.
      */
     consent?: () => boolean | Promise<boolean>;
+    /**
+     * With a `consent` gate, report uncaught errors and unhandled rejections
+     * while consent is pending or refused. These reports carry no session,
+     * window or user id, read and write no cookie or storage, and record the
+     * page as origin and path only (no query or fragment). Nothing else is
+     * captured until consent resolves true, when full capture replaces this
+     * mode. Default false. Check with your privacy counsel before enabling it
+     * for visitors who must opt in.
+     */
+    errorsBeforeConsent?: boolean;
     /** Batch flush cadence in ms. Default 5000. */
     flushIntervalMs?: number;
     /**

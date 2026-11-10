@@ -7,7 +7,9 @@ export { SDK_VERSION } from "./version.js";
  * is provided, nothing new is installed (no listeners, no patches, no
  * network) until it resolves true; on false (or a throw) the SDK stays
  * dormant. (Patches pre-installed by `@sazabi/browser/register` exist
- * but remain inert passthroughs until activation.)
+ * but remain inert passthroughs until activation.) With
+ * `errorsBeforeConsent`, uncaught errors and unhandled rejections are
+ * reported, without storage or ids, while consent is pending or refused.
  */
 export declare const init: (config: BrowserSdkConfig) => void;
 /** Set the client-asserted user identity (`session.distinct_id`). */
